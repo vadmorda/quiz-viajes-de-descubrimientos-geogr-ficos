@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploradores y Descubrimientos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://i.imgur.com/bRDBKVN.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+        }
+        .quiz-container {
+            width: 70%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .question {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .image-container img {
+            width: 80%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 14px 28px;
+            font-size: 20px;
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #01579b;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Exploradores y Descubrimientos</h1>
+        <div class="image-container"><img id="question-image" src="" alt="Pregunta" /></div>
+        <div id="question-container" class="question"></div>
+        <div id="options-container"></div>
+        <button id="next-btn" onclick="nextQuestion()">Siguiente</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        const questions = [
+          { img: "https://i.imgur.com/GMSv32P.jpeg", q: "¿Qué instrumento permitía orientarse en el mar por la noche?", options: ["Brújula", "Astrolabio", "Telescopio"], answer: 1 },
+            { img: "https://i.imgur.com/0lR1ZeI.jpeg", q: "¿Qué tipo de barco fue clave en los descubrimientos geográficos?", options: ["Galeón", "Carabela", "Trirreme"], answer: 1 },
+            { img: "https://i.imgur.com/UvPybCt.jpeg", q: "¿Quién cruzó el istmo de Panamá y descubrió el océano Pacífico?", options: ["Cristóbal Colón", "Vasco Núñez de Balboa", "Fernando de Magallanes"], answer: 1 },
+            { img: "https://i.imgur.com/TJ5OSXY.jpeg", q: "¿Qué tratado dividió el mundo entre España y Portugal en 1494?", options: ["Tratado de Tordesillas", "Tratado de Alcáçovas", "Tratado de Versalles"], answer: 0 },
+            { img: "https://i.imgur.com/b0cGvkr.jpeg", q: "¿Quién dirigió la primera vuelta al mundo?", options: ["Magallanes y Elcano", "Colón y Pinzón", "Vasco de Gama"], answer: 0 },
+            { img: "https://i.imgur.com/u8QAK5t.jpeg", q: "¿Quién firmó las Capitulaciones de Santa Fe con Cristóbal Colón?", options: ["Reyes Católicos", "Carlos V", "Felipe II"], answer: 0 },
+            { img: "https://i.imgur.com/SIyNmqk.jpeg", q: "¿Qué explorador cartografió gran parte de América del Sur?", options: ["Américo Vespucio", "Hernán Cortés", "Vasco Núñez de Balboa"], answer: 0 },
+            { img: "https://i.imgur.com/9qXEqKt.jpeg", q: "¿Qué país financió el viaje de Cristóbal Colón?", options: ["Portugal", "España", "Francia"], answer: 1 },
+            { img: "https://i.imgur.com/sjqp3v6.jpeg", q: "¿Cuál fue la primera isla a la que llegó Cristóbal Colón?", options: ["San Salvador", "Cuba", "La Española"], answer: 0 },
+            { img: "https://i.imgur.com/ObUdW4R.jpeg", q: "¿Qué rey portugués promovió la exploración de la costa africana?", options: ["Juan II", "Enrique el Navegante", "Manuel I"], answer: 1 },
+            { img: "https://i.imgur.com/gUublUJ.jpeg", q: "¿Qué factor impulsó la búsqueda de nuevas rutas comerciales?", options: ["Cierre de rutas terrestres por los turcos", "Escasez de barcos", "Descubrimiento del Nuevo Mundo"], answer: 0 }, 
+          { img: "https://i.imgur.com/I6WIw6c.jpeg", q: "¿Qué tratado solucionó la rivalidad entre Portugal y Castilla en 1479?", options: ["Tratado de Alcáçovas", "Tratado de Tordesillas", "Tratado de Versalles"], answer: 0 },
+            { img: "https://i.imgur.com/NXn6cxH.jpeg", q: "¿Quién dobló el cabo de Buena Esperanza en 1487?", options: ["Bartolomé Díaz", "Vasco de Gama", "Fernando de Magallanes"], answer: 0 },
+            { img: "https://i.imgur.com/WDf1gfZ.jpeg", q: "¿Qué recurso era buscado en el Sudán y comerciado por los portugueses?", options: ["Especias", "Oro", "Cobre"], answer: 1 },
+            { img: "https://i.imgur.com/RgS3h6h.jpeg", q: "¿Qué avances técnicos ayudaron a la navegación oceánica?", options: ["Brújula y astrolabio", "Catalejo y sextante", "Microscopio y reloj de arena"], answer: 0 },
+            { img: "https://i.imgur.com/sO3vqrG.jpeg", q: "¿Qué explorador llegó a la India en 1498?", options: ["Cristóbal Colón", "Vasco de Gama", "Américo Vespucio"], answer: 1 },
+            { img: "https://i.imgur.com/YvyCEtm.jpeg", q: "¿Qué se firmó en 1492 para autorizar el viaje de Colón?", options: ["Tratado de Tordesillas", "Capitulaciones de Santa Fe", "Edicto de Nantes"], answer: 1 }
+          
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let mistakes = 0;
+        const maxMistakes = 3;
+
+        function loadQuestion() {
+            document.getElementById("question-image").src = questions[currentQuestion].img;
+            document.getElementById("question-container").textContent = questions[currentQuestion].q;
+            const optionsContainer = document.getElementById("options-container");
+            optionsContainer.innerHTML = "";
+            questions[currentQuestion].options.forEach((option, index) => {
+                optionsContainer.innerHTML += `<label><input type='radio' name='answer' value='${index}'> ${option}</label>`;
+            });
+        }
+
+        function nextQuestion() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            if (!selectedOption) {
+                alert("Selecciona una respuesta antes de continuar.");
+                return;
+            }
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("question-container").innerHTML = "¡Has completado el quiz!";
+                document.getElementById("options-container").innerHTML = "";
+                document.getElementById("next-btn").style.display = "none";
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>

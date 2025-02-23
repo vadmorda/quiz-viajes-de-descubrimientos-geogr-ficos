@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -57,6 +57,10 @@
             font-weight: bold;
             color: #333;
         }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -67,10 +71,11 @@
         <div id="options-container"></div>
         <button id="next-btn" onclick="nextQuestion()">Siguiente</button>
         <p id="result"></p>
+        <ul id="mistakes-list"></ul>
     </div>
     <script>
         const questions = [
-          { img: "https://i.imgur.com/GMSv32P.jpeg", q: "¿Qué instrumento permitía orientarse en el mar por la noche?", options: ["Brújula", "Astrolabio", "Telescopio"], answer: 1 },
+        { img: "https://i.imgur.com/GMSv32P.jpeg", q: "¿Qué instrumento permitía orientarse en el mar por la noche?", options: ["Brújula", "Astrolabio", "Telescopio"], answer: 1 },
             { img: "https://i.imgur.com/0lR1ZeI.jpeg", q: "¿Qué tipo de barco fue clave en los descubrimientos geográficos?", options: ["Galeón", "Carabela", "Trirreme"], answer: 1 },
             { img: "https://i.imgur.com/UvPybCt.jpeg", q: "¿Quién cruzó el istmo de Panamá y descubrió el océano Pacífico?", options: ["Cristóbal Colón", "Vasco Núñez de Balboa", "Fernando de Magallanes"], answer: 1 },
             { img: "https://i.imgur.com/TJ5OSXY.jpeg", q: "¿Qué tratado dividió el mundo entre España y Portugal en 1494?", options: ["Tratado de Tordesillas", "Tratado de Alcáçovas", "Tratado de Versalles"], answer: 0 },
@@ -87,14 +92,12 @@
             { img: "https://i.imgur.com/RgS3h6h.jpeg", q: "¿Qué avances técnicos ayudaron a la navegación oceánica?", options: ["Brújula y astrolabio", "Catalejo y sextante", "Microscopio y reloj de arena"], answer: 0 },
             { img: "https://i.imgur.com/sO3vqrG.jpeg", q: "¿Qué explorador llegó a la India en 1498?", options: ["Cristóbal Colón", "Vasco de Gama", "Américo Vespucio"], answer: 1 },
             { img: "https://i.imgur.com/YvyCEtm.jpeg", q: "¿Qué se firmó en 1492 para autorizar el viaje de Colón?", options: ["Tratado de Tordesillas", "Capitulaciones de Santa Fe", "Edicto de Nantes"], answer: 1 }
-          
         ];
-
+        
         let currentQuestion = 0;
         let score = 0;
-        let mistakes = 0;
-        const maxMistakes = 3;
-
+        let mistakes = [];
+        
         function loadQuestion() {
             document.getElementById("question-image").src = questions[currentQuestion].img;
             document.getElementById("question-container").textContent = questions[currentQuestion].q;
@@ -111,13 +114,32 @@
                 alert("Selecciona una respuesta antes de continuar.");
                 return;
             }
+            if (parseInt(selectedOption.value) === questions[currentQuestion].answer) {
+                score++;
+            } else {
+                mistakes.push(questions[currentQuestion].q);
+            }
             currentQuestion++;
             if (currentQuestion < questions.length) {
                 loadQuestion();
             } else {
-                document.getElementById("question-container").innerHTML = "¡Has completado el quiz!";
-                document.getElementById("options-container").innerHTML = "";
-                document.getElementById("next-btn").style.display = "none";
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("question-container").innerHTML = "¡Has completado el quiz!";
+            document.getElementById("options-container").innerHTML = "";
+            document.getElementById("next-btn").style.display = "none";
+            document.getElementById("result").textContent = `Aciertos: ${score}, Errores: ${mistakes.length}`;
+            
+            const mistakesList = document.getElementById("mistakes-list");
+            mistakesList.innerHTML = "";
+            if (mistakes.length > 0) {
+                mistakesList.innerHTML = "<h3>Preguntas incorrectas:</h3>";
+                mistakes.forEach(mistake => {
+                    mistakesList.innerHTML += `<li class='incorrect'>${mistake}</li>`;
+                });
             }
         }
 
@@ -125,3 +147,4 @@
     </script>
 </body>
 </html>
+!DOCTYPE html>
